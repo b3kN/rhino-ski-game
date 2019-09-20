@@ -63,20 +63,30 @@ export class Game {
     handleKeyDown(event) {
         switch(event.which) {
             case Constants.KEYS.LEFT:
-                this.skier.turnLeft();
-                event.preventDefault();
+                if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    this.skier.turnLeft();
+                    event.preventDefault();
+                }
                 break;
-            case Constants.KEYS.RIGHT:
-                this.skier.turnRight();
-                event.preventDefault();
+          case Constants.KEYS.RIGHT:
+                if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    this.skier.turnRight();
+                    event.preventDefault();
+                }
                 break;
             case Constants.KEYS.UP:
-                this.skier.turnUp();
-                event.preventDefault();
+                if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    this.skier.turnUp();
+                    event.preventDefault();
+                }
                 break;
             case Constants.KEYS.DOWN:
-                this.skier.turnDown();
-                event.preventDefault();
+                if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    this.skier.turnDown();
+                    event.preventDefault();
+                } else {
+                    this.skier.performTrick();
+                }
                 break;
         }
     }

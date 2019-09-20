@@ -3,8 +3,8 @@ import { Entity } from "./Entity";
 import { intersectTwoRects, Rect } from "../Core/Utils";
 
 export class Skier extends Entity {
-    assetName = Constants.SKIER_DOWN;
-    direction = Constants.SKIER_DIRECTIONS.DOWN;
+    assetName = Constants.SKIER_LEFT;
+    direction = Constants.SKIER_DIRECTIONS.LEFT;
     speed = Constants.SKIER_STARTING_SPEED;
     recoverCrash = false;
     activateJump = false;
@@ -133,22 +133,23 @@ export class Skier extends Entity {
             );
 
             if (intersectTwoRects(skierBounds, obstacleBounds)) {
-              if (obstacle.getAssetName() === Constants.SKIER_RAMP) {
-                if (!this.skierIsJumping) {
-                  console.log('reduce speed / 2');
-                  this.speed /= 2;
-                  this.activateJump = true;
-                }
-              }
-
-              if (obstacle.getAssetName() === Constants.TREE || obstacle.getAssetName() === Constants.TREE_CLUSTER) {
-                if (this.activateJump) {
-                  this.speed *= 2;
-                  this.activateJump = false;
+                if (obstacle.getAssetName() === Constants.SKIER_RAMP) {
+                    if (!this.recoverCrash && !this.skierIsJumping) {
+                        console.log('Skier has jumped! Reduce the speed by half for now.');
+                        this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
+                        this.speed /= 2;
+                        this.activateJump = true;
+                    }
                 }
 
-                if (this.skierIsJumping) this.skierIsJumping = false;
-              }
+                if (obstacle.getAssetName() === Constants.TREE || obstacle.getAssetName() === Constants.TREE_CLUSTER) {
+                    if (this.activateJump || this.skierIsJumping) {
+                        console.log('Skier crashed into tree while jumping!');
+                        this.speed *= 2;
+                        this.activateJump = false;
+                        this.skierIsJumping = false;
+                    }
+                }
             }
 
             return intersectTwoRects(skierBounds, obstacleBounds);
@@ -157,12 +158,12 @@ export class Skier extends Entity {
         // If the recover crash boolean is set to false and collision was found,
         // then set the direction to the crash setting.
         if (!this.recoverCrash) {
-          if (collision && !this.skierIsJumping) {
-            if (this.activateJump)
-              this.performJump(Constants.SKIER_JUMPING.STAGE_1);
-            else
-              this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
-          }
+            if (collision && !this.skierIsJumping) {
+                if (this.activateJump)
+                    this.performJump();
+                else
+                    this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            }
         } else {
             // If the recover crash boolean is set to true and collision was found,
             // reset the recover crash boolean to false to allow user input.
@@ -174,31 +175,44 @@ export class Skier extends Entity {
         }
     }
 
-  performJump(nextStage) {
-    let self = this;
-    let futureStage = nextStage + 1;
-    // console.log('performJump nextStage: ' + nextStage);
+    performTrick() {
+        console.log('Current asset name: ' + this.assetName);
+        let currentTrick = Object.keys(Constants.SKIER_JUMPING_ASSETS).find(key => Constants.SKIER_JUMPING_ASSETS[key] === this.assetName);
+        console.log('Current trick stage for skier jump: ' + currentTrick);
 
-    if (nextStage === Constants.SKIER_JUMPING.STAGE_1) {
-      this.activateJump = false;
-      this.skierIsJumping = true;
+        if (currentTrick < Constants.SKIER_JUMPING.STAGE_5) {
+            let nextTrick = Number(currentTrick) + 1;
+            console.log('Update asset for next trick stage: ' + nextTrick);
+            this.updateAsset(nextTrick);
+        } else {
+            console.log('Skier completed trick sequence! Reset to first stage of jump.');
+            this.updateAsset(Constants.SKIER_JUMPING.STAGE_1);
+        }
     }
 
-    if (this.skierIsJumping) {
-      if (nextStage > Constants.SKIER_JUMPING.STAGE_4) {
-        this.speed *= 2;
-        // console.log('reset speed * 2');
-        this.skierIsJumping = false;
-        self.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
-      } else {
-        this.updateAsset(nextStage);
-        // console.log('performJump update asset to: ' + nextStage);
+    performJump() {
+      console.log('Game has activated performJump action for skier.');
+        this.activateJump = false;
+        this.skierIsJumping = true;
+        this.updateAsset(Constants.SKIER_JUMPING.STAGE_1);
 
+        let self = this;
         setTimeout(function () {
-          // console.log('performJump execute instance for performJump with stage after next: ' + futureStage);
-          self.performJump(futureStage);
-        }, 400);
-      }
+            if (self.skierIsJumping) {
+                console.log('Skier airtime has ended, determine if they landed or crashed.');
+                console.log('Reset the speed of travel for the Skier.');
+                self.skierIsJumping = false;
+                self.speed *= 2;
+          
+                console.log('Current display asset: ' + self.assetName);
+                if (self.assetName === Constants.SKIER_JUMP.STAGE_1 || self.assetName === Constants.SKIER_JUMP.STAGE_5) {
+                    console.log('Skier is in initial jump or final trick stage. Land successfully and continue.');
+                    self.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
+                } else {
+                    console.log('Skier is in midst of a trick and crashed! oh no!');
+                    self.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+                }
+            }
+        }, 1500);
     }
-  }
 }
