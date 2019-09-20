@@ -22,7 +22,7 @@ export const ROCK1 = 'rock1';
 export const ROCK2 = 'rock2';
 
 export const SKIER_STARTING_SPEED = 10;
-export const SKIER_DIAGONAL_SPEED_REDUCER = 1.4142;
+export const SKIER_DIAGONAL_SPEED_REDUCER = 4;
 
 export const ASSETS = {
     [SKIER_CRASH]: 'img/skier_crash.png',
@@ -36,6 +36,7 @@ export const ASSETS = {
     [SKIER_JUMP.STAGE_2]: 'img/skier_jump_2.png',
     [SKIER_JUMP.STAGE_3]: 'img/skier_jump_3.png',
     [SKIER_JUMP.STAGE_4]: 'img/skier_jump_4.png',
+    [SKIER_JUMP.STAGE_5]: 'img/skier_jump_5.png',
     [TREE] : 'img/tree_1.png',
     [TREE_CLUSTER] : 'img/tree_cluster.png',
     [ROCK1] : 'img/rock_1.png',
@@ -64,14 +65,16 @@ export const SKIER_JUMPING = {
     STAGE_1: 6,
     STAGE_2: 7,
     STAGE_3: 8,
-    STAGE_4: 9    
+    STAGE_4: 9,
+    STAGE_5: 10     
 };
 
 export const SKIER_JUMPING_ASSETS = {
     [SKIER_JUMPING.STAGE_1]: SKIER_JUMP.STAGE_1,
     [SKIER_JUMPING.STAGE_2]: SKIER_JUMP.STAGE_2,
     [SKIER_JUMPING.STAGE_3]: SKIER_JUMP.STAGE_3,
-    [SKIER_JUMPING.STAGE_4]: SKIER_JUMP.STAGE_4
+    [SKIER_JUMPING.STAGE_4]: SKIER_JUMP.STAGE_4,
+    [SKIER_JUMPING.STAGE_5]: SKIER_JUMP.STAGE_5
 };
 
 export const KEYS = {
