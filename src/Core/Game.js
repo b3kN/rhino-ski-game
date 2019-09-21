@@ -82,6 +82,7 @@ export class Game {
                 break;
           case Constants.KEYS.RIGHT:
                 if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    if (!this.timerStarted) this.initializeTimer();
                     this.skier.turnRight();
                     event.preventDefault();
                 }
@@ -94,12 +95,54 @@ export class Game {
                 break;
             case Constants.KEYS.DOWN:
                 if (!this.skier.activateJump && !this.skier.skierIsJumping) {
+                    if (!this.timerStarted) this.initializeTimer();
                     this.skier.turnDown();
                     event.preventDefault();
                 } else {
+                    // If the skier is in the air, allow down arrow presses to perform trick sequence
                     this.skier.performTrick();
                 }
                 break;
         }
+    }
+
+    // Initialize interval to start counting the seconds and minutes the skier has been travelling.
+    initializeTimer() {
+        const minutesLabel = document.getElementById('minutes'),
+              secondsLabel = document.getElementById('seconds');
+
+        this.timerStarted = true;
+
+        let self = this;
+        this.timerInverval = setInterval(function () {
+            ++self.seconds; // Increment the class value for seconds travelled.
+
+            // Get full seconds count to this point.
+            // If 1.5 minutes have past, then update rhino position to start chasing.
+            let minutesCount = parseInt(self.seconds / 60);
+            let secondsCount = self.seconds % 60;
+            if (secondsCount === 30 && minutesCount === 1) {
+                const startingLine = {
+                    x: self.skier.x + (Constants.GAME_WIDTH / 2),
+                    y: self.skier.y
+                };
+
+                self.rhinoEnroute = true;
+                self.rhino.x = startingLine.x;
+                self.rhino.y = startingLine.y;
+            }
+
+            secondsLabel.innerHTML = self.getTime(self.seconds % 60);
+            minutesLabel.innerHTML = self.getTime(parseInt(self.seconds / 60));
+        }, 1000);
+    }
+
+    getTime(val) {
+        let value = val.toString();
+
+        if (value.length < 2)
+            return "0" + value;
+        else
+            return value;
     }
 }

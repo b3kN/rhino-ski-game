@@ -16,6 +16,44 @@ export class Canvas {
         this.createCanvas();
     }
 
+    // Implement the scoreboard section to display the timer as the skier progresses.
+    // NOTE: It would've been really fun to implement points here for style and distance, but my time expired.
+    createScoreboard() {
+        const scoreboard = document.createElement('div');
+        scoreboard.id = "scoreboard";
+
+        const timer = document.createElement('div');
+        const timerLabel = document.createElement('label');
+        const timerContent = document.createElement('span');
+        const labelContent = document.createTextNode('Timer: ');
+        const minutes = document.createElement('span');
+        const minutesCt = document.createTextNode('00');
+        const separator = document.createElement('span');
+        const separatorText = document.createTextNode(':');
+        const seconds = document.createElement('span');
+        const secondsCt = document.createTextNode('00');
+
+        timerLabel.appendChild(labelContent);
+
+        minutes.id = "minutes";
+        minutes.appendChild(minutesCt);
+
+        separator.appendChild(separatorText);
+
+        seconds.id = "seconds";
+        seconds.appendChild(secondsCt);
+
+        timerContent.appendChild(minutes);
+        timerContent.appendChild(separator);
+        timerContent.appendChild(seconds);
+        timer.appendChild(timerLabel);
+        timer.appendChild(timerContent);
+
+        scoreboard.appendChild(timer);
+
+        document.body.appendChild(scoreboard);
+    }
+
     createCanvas() {
         const canvas = document.createElement('canvas');
         canvas.id = "skiCanvas";
@@ -28,6 +66,7 @@ export class Canvas {
         this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
         document.body.appendChild(canvas);
+        this.createScoreboard();
     }
 
     clearCanvas() {
