@@ -91,3 +91,99 @@ how creative candidates get with this.
 * Write more unit tests for your code
 
 We are looking forward to see what you come up with!
+
+---
+
+### Documentation of final solution
+###### Provided by Nicholas 'b3kn' Bekeris
+
+#### Bug Resolution
+* Initial report of bug:
+** Game crashes when the skier collides with obstacles and attempts to get up by facing left.
+* Notes while researching bug:
+** Current methods appear to attempt applying decremental factor to crash constant.
+** Crashes because there is no direction/asset for -1 when trying to decrement from 0 (crash constant).
+* How bug was fixed:
+** Implemented "recoverCrash" property to determine when the skier has crashed and can reset stance.
+** Updated functionality on move of skier that has collided to move skier to safe position while facing left.
+*** Added functionality to move the skier to safe position "in front" of the obstacle.
+
+#### New Implementations
+* Ramp Jumping
+** Implemented ramp obstacles that initiate a jump when skier rides over them.
+** Jump allows for 90 seconds of airtime at 1.5x the original speed.
+*** Increased speed gives skier possibility of evading the rhino enemy.
+*** During this airtime, the skier will fly over all obstacles other than trees and tree clusters.
+** Skier can perform tricks by pressing the down arrow key.
+*** There is a set sequence of 5 stages that must be completed in order to land successfully.
+*** Skier can land successfully by landing in the first or last position.
+*** **NOTE** Skier can only perform the flip trick at the moment as nothing was implemented for spins.
+
+* Rhino Enemy
+** Spawns after the skier has been travelling for 1 minute and 30 seconds.
+** Chases down the skier starting from the right side of the screen.
+*** Rhino is initialized off screen and travels its way to the skier.
+*** Rhino will be placed in line with the skier at their position and will quickly try to catch the skier.
+*** Rhino has increased speed to try and chase down the skier quickly.
+**** **NOTE** Ideally the skier would be able to gain speed to avoid being captured but time expired before reaching this point.
+** When catching/colliding with the skier the rhino will lift and eat the skier with a sequence of actions.
+*** Each action sequence stage is delay by 600ms to give animation appeal.
+*** Rhino class will detect the position of skier and itself to determine the route/movements the rhino will take.
+
+* Scoreboard/Timer display
+** Implemented basic counting timer (interval) to calculate the minutes and seconds during current instance.
+** Timer will start when the skier iniates travelling down the mountain/slope.
+*** After 90 seconds have past, the timer will initiate the rhino's chase actions.
+*** **NOTE** Would've liked to set up distance & style point systems with more time by calculating:
+**** Style points for each trick completed & additional points for holding tricks to maximum airtime.
+**** Distance points for travelling longer periods of time without crashing into obstacles.
+**** Crashed tricks would be subtracted from style scores and potential points would be ignored.
+**** Obstacle crashes would be subtracted from distance scores as well.
+
+#### Development Reasoning
+In the end the idea of this solution was to match the old-school style of the Ski Free game originally on Microsoft OS.
+
+* Implemented "recoverCrash" in the Skier class
+** This boolean is required for the skier to be able to recover from a crash by turning left.
+** Based on the status of this value, the skier will be able to stand in front of collided obstacle without game crashing.
+* Implemented "activateJump" in the Skier class
+** This boolean is purely used to tell future methods to perform jump functionality after skier hits a ramp.
+** Used to initialize "skierIsJumping" boolean.
+* Implemented "skierIsJumping" in the Skier class
+** This boolean is used as a determing factor for if the skier is in the air and can avoid short obstacles (rocks, ramps, etc).
+** This is also used in the Game class to determine if the skier is able to perform flip tricks.
+* Implemented "rhinoEnroute" in the Game class
+** This boolean is used to initiate rhino chase and determine if the rhino is chasing at time of collision.
+* Implemented "timerStarted" in the Game class
+** This boolean is purely for initiating the time counter.
+** **NOTE** Would've been used for score calcuations of distance travelled and acceleration of skier speed.
+* Implemented "caughtSkier" in the Rhino class
+** This boolean is essential for determining when the skier has been caught and when to proceed with feasting on skier.
+** Shared through the Game class to the Skier class to dismiss the current skier asset and begin eating animations.
+** It is also used to determine when the clock stops on the timer.
+
+#### Missed Development Improvements
+While working through this more finalized product it has come to my attention that several methods and instances could be refactored.
+Particularly with the Entity extended classes the methods could be shared easier to provide better practiced development.
+
+#### Known Issues / Buggy Instances
+* Rhino can catch skier while the skier is in the air.
+
+#### Deploying The Game
+Runnig the npm install script will be required for all deployments:
+``` npm install ```
+
+###### Development
+1. Run the script for dev deployment:
+``` npm run dev ```
+
+2. Access the webpacked development deployment at [localhost:8080](localhost:8080)
+
+###### Production
+1. Run the script for production build & deployment:
+``` npm run build ```
+
+2. Access the webpacked development deployment at your hosted domain or localhost.
+
+#### Enjoy a Running Instance
+Simply visit [localhost:8080](Coming Soon) to play a version of the game hosted on heroku!

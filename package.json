@@ -1,6 +1,6 @@
 {
   "name": "ceros-ski",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Ceros full stack developer code challenge",
   "main": "index.js",
   "scripts": {
@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ceros/ceros-ski.git"
+    "url": "git+https://github.com/b3kn/rhino-ski-game.git"
   },
-  "author": "Dan Wash",
+  "author": "Nicholas Bekeris",
   "license": "",
-  "homepage": "https://github.com/ceros/ceros-ski#readme",
+  "homepage": "https://github.com/b3kn/rhino-ski-game#readme",
   "devDependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
