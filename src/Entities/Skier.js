@@ -42,7 +42,7 @@ export class Skier extends Entity {
     }
 
     moveSkierLeft() {
-        this.x -= Constants.SKIER_STARTING_SPEED;
+        this.x -= this.speed;
     }
 
     moveSkierLeftDown() {
@@ -60,11 +60,11 @@ export class Skier extends Entity {
     }
 
     moveSkierRight() {
-        this.x += Constants.SKIER_STARTING_SPEED;
+        this.x += this.speed;
     }
 
     moveSkierUp() {
-        this.y -= Constants.SKIER_STARTING_SPEED;
+        this.y -= this.speed;
     }
 
     turnLeft() {
@@ -149,7 +149,7 @@ export class Skier extends Entity {
                         if (!this.recoverCrash && !this.skierIsJumping) {
                             // console.log('Skier has jumped! Reduce the speed by half for now.');
                             this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
-                            this.speed /= 2;
+                            this.speed *= 1.5;
                             this.activateJump = true;
                         }
                     }
@@ -161,7 +161,7 @@ export class Skier extends Entity {
                         // and deactivate all current jumping actions.
                         if (this.activateJump || this.skierIsJumping) {
                             // console.log('Skier crashed into tree while jumping!');
-                            this.speed *= 2;
+                            this.speed /= 1.5;
                             this.activateJump = false;
                             this.skierIsJumping = false;
                         }
@@ -233,7 +233,7 @@ export class Skier extends Entity {
                 // console.log('Skier airtime has ended, determine if they landed or crashed.');
                 // console.log('Reset the speed of travel for the Skier.');
                 self.skierIsJumping = false;
-                self.speed *= 2;
+                self.speed /= 1.5;
           
                 // console.log('Current display asset: ' + self.assetName);
                 if (self.assetName === Constants.SKIER_JUMP.STAGE_1 || self.assetName === Constants.SKIER_JUMP.STAGE_5) {

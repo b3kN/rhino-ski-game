@@ -57,7 +57,7 @@ export class Rhino extends Entity {
     }
 
     moveRhinoLeft() {
-        this.x -= Constants.RHINO_STARTING_SPEED;
+        this.x -= this.speed;
     }
 
     moveRhinoLeftDown() {
