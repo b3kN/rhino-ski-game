@@ -1,6 +1,7 @@
 const path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin')
 require("@babel/register");
+const CopyPlugin = require('copy-webpack-plugin');
 
 // Webpack Configuration
 const config = {
@@ -33,7 +34,11 @@ const config = {
     plugins: [
         new htmlWebpackPlugin({
             title: 'Ceros Ski'
-        })
+        }),
+        new CopyPlugin([
+          { from: 'img', to: 'img' },
+          { from: 'css', to: 'css' },
+        ])
     ],
 };
 

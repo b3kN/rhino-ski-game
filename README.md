@@ -177,13 +177,13 @@ Runnig the npm install script will be required for all deployments:
 1. Run the script for dev deployment:
 ``` npm run dev ```
 
-2. Access the webpacked development deployment at [localhost:8080](localhost:8080)
+2. Access the webpacked development deployment at [http://localhost:8080](localhost:8080)
 
 ###### Production
 1. Run the script for production build & deployment:
-``` npm run build ```
+``` npm start ```
 
-2. Access the webpacked development deployment at your hosted domain or localhost.
+2. Access the webpacked development deployment at your hosted domain or [http://localhost:3000](localhost:3000).
 
 #### Enjoy a Running Instance
-Simply visit [localhost:8080](Coming Soon) to play a version of the game hosted on heroku!
+Simply visit [https://ceros-ski-free.herokuapp.com/](Live Ski Free: Rhino Edition) to play a version of the game hosted on heroku!
