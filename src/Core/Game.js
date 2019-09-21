@@ -2,16 +2,22 @@ import * as Constants from "../Constants";
 import { AssetManager } from "./AssetManager";
 import { Canvas } from './Canvas';
 import { Skier } from "../Entities/Skier";
+import { Rhino } from "../Entities/Rhino";
 import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { Rect } from './Utils';
 
 export class Game {
     gameWindow = null;
+    seconds = 0;
+    timerStarted = false;
+    rhinoEnroute = false;
+    timerInverval;
 
     constructor() {
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
+        this.rhino = new Rhino(-100, );
         this.obstacleManager = new ObstacleManager();
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -35,20 +41,26 @@ export class Game {
     }
 
     updateGameWindow() {
+        // Clear timer interval if the skier was caught by the rhino.
+        if (this.rhino.caughtSkier) clearInterval(this.timerInverval);
+
+        // If the rhino is chasing the skier, then perform check for rhino to chase skier
+        if (this.rhinoEnroute) this.rhino.checkRouteToSkier(this.skier, this.assetManager);
         this.skier.move();
 
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
-
+       
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
-        this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+        // Included caught skier boolean from rhino class for skier to update if caught
+        this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager, this.rhino.caughtSkier);
     }
 
     drawGameWindow() {
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
-
         this.skier.draw(this.canvas, this.assetManager);
+        this.rhino.draw(this.canvas, this.assetManager);
         this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
     }
 
